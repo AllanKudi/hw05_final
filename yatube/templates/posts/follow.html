@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}
+  Последние обновления у избранных авторов
+{% endblock %}
+{% block header %}
+<div class="container">
+  <h1>Последние обновления у избранных авторов</h1>
+</div>
+{% endblock %}
+{% block content %}
+{% include 'posts/includes/switcher.html' %}
+  {% for post in page_obj %}
+    <div class="container">
+      {% include 'posts/includes/post_list.html' %}
+        {% if post.group %}
+          <br><a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+        {% endif %}
+        {% if not forloop.last %}
+          <hr>
+        {% endif %}
+    </div>
+  {% endfor %}
+  {% include 'posts/includes/paginator.html' %}
+  {% endblock %}

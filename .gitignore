@@ -150,3 +150,6 @@ static/
 yatube/posts/static/
 yatube/media/
 
+.css
+
+.svg
