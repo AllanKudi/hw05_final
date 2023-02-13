@@ -217,8 +217,6 @@ class FollowTests(TestCase):
             'posts:profile_follow',
             kwargs={'username': self.user_following.username})
         )
-        new_follow = Follow.objects.all().count()
-        self.assertEqual(new_follow, 1)
         self.assertTrue(Follow.objects.filter(
             user=self.user_follower,
             author=self.user_following
@@ -237,8 +235,6 @@ class FollowTests(TestCase):
             'posts:profile_unfollow',
             kwargs={'username': self.user_following.username})
         )
-        new_follow = Follow.objects.all().count()
-        self.assertEqual(new_follow, 0)
         self.assertFalse(Follow.objects.filter(
             user=self.user_follower,
             author=self.user_following

@@ -1,7 +1,7 @@
 import shutil
 import tempfile
-
 from http import HTTPStatus
+
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
@@ -51,11 +51,12 @@ class PostFormTests(TestCase):
             b'\x02\x4c\x01\x00\x3b'
         )
         uploaded = SimpleUploadedFile(
-            name='small.gif',
+            name='small2.gif',
             content=small_gif,
             content_type='image/gif'
         )
         form_data = {
+            'author': self.author,
             'group': self.group.id,
             'text': 'Измененный текст',
             'image': uploaded,
@@ -65,15 +66,17 @@ class PostFormTests(TestCase):
             data=form_data,
             follow=True
         )
+        post_img = form_data['image']
         self.assertRedirects(response, reverse(
             'posts:profile', kwargs={'username': self.author.username})
         )
         self.assertEqual(Post.objects.count(), posts_count + 1)
-        self.assertContains(response, '<img')
         self.assertTrue(
             Post.objects.filter(
+                author=form_data['author'],
                 group=form_data['group'],
                 text=form_data['text'],
+                image=f'posts/{post_img}',
             ).exists()
         )
 

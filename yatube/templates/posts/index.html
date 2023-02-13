@@ -9,19 +9,19 @@
 </div>
 {% endblock %}
 {% block content %}
-{% cache 1200 index_page request.user.username %}
-{% include 'posts/includes/switcher.html' %}
-  {% for post in page_obj %}
-    <div class="container">
-      {% include 'posts/includes/post_list.html' %}
+  {% cache 1200 index_page request.user.username %}
+    {% include 'posts/includes/switcher.html' %}
+    {% for post in page_obj %}
+      <div class="container">
+        {% include 'posts/includes/post_list.html' %}
         {% if post.group %}
           <br><a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
         {% endif %}
         {% if not forloop.last %}
           <hr>
         {% endif %}
-    </div>
-  {% endfor %}
-  {% include 'posts/includes/paginator.html' %}
+      </div>
+    {% endfor %}
+    {% include 'posts/includes/paginator.html' %}
   {% endcache %}
-  {% endblock %}
+{% endblock %}

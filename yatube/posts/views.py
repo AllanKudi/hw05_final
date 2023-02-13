@@ -18,7 +18,7 @@ def paginate(post_list, request):
 
 
 def index(request):
-    post_list = Post.objects.all()
+    post_list = Post.objects.select_related('group').all()
     page_obj = paginate(post_list, request)
     context = {
         'page_obj': page_obj,
@@ -74,7 +74,8 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None,
+                    request.FILES or None)
     if not request.method == 'POST':
         return render(request, 'posts/create_post.html', {'form': form})
     if not form.is_valid():
@@ -131,11 +132,10 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    author = User.objects.get(username=username)
+    author = get_object_or_404(User, username=username)
     user = request.user
-    follow = Follow.objects.filter(user=user, author=author)
-    if user != author and not follow.exists():
-        Follow.objects.create(user=user, author=author)
+    if user != author:
+        Follow.objects.get_or_create(user=user, author=author)
     return redirect('posts:profile', username=username)
 
 
@@ -143,7 +143,5 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     user = request.user
-    follow = Follow.objects.filter(user=user, author=author)
-    if follow.exists():
-        follow.delete()
+    Follow.objects.filter(user=user, author=author).delete()
     return redirect('posts:profile', username=username)

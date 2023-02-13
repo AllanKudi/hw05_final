@@ -2,7 +2,6 @@ from django.views.generic import CreateView
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView
 from django.urls import reverse_lazy
 
-
 from .forms import CreationForm, ChangeForm, PasswordReset
 
 

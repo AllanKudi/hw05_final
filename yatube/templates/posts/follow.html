@@ -8,7 +8,7 @@
 </div>
 {% endblock %}
 {% block content %}
-{% include 'posts/includes/switcher.html' %}
+  {% include 'posts/includes/switcher.html' %}
   {% for post in page_obj %}
     <div class="container">
       {% include 'posts/includes/post_list.html' %}
@@ -21,4 +21,4 @@
     </div>
   {% endfor %}
   {% include 'posts/includes/paginator.html' %}
-  {% endblock %}
+{% endblock %}
